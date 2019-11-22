@@ -64,9 +64,23 @@ jobs:
       - run:
           name: unit-test
           command: ./ci/unit-tests
+  e2e:
+    docker:
+      - image: cypress/base:10
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - <<: *show_bash_version
+      - <<: *restore_cache
+      - <<: *install_node_modules
+      - <<: *save_cache
+      - run:
+          name: e2e test
+          command: ./ci/e2e
 workflows:
   version: 2
   angular-chile-pipeline:
     jobs:
       - linter
       - unit-tests
+      - e2e
